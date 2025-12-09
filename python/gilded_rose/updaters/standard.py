@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from gilded_rose import Item
 
 from .base import ItemUpdater, decrease_quality, decrease_sell_in
