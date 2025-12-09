@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
-from gilded_rose import Item
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    # Importation locale pour éviter les dépendances circulaires
+    from gilded_rose import Item
 
 class ItemUpdater(ABC):
     """Interface commune pour toutes les stratégies de mise à jour."""
