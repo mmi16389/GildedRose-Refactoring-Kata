@@ -10,7 +10,6 @@ class TestStandardItems(GildedRoseTestCase):
     Le sell_in diminue de 1 chaque jour.
     et 2 points par jour après la date de vente.
     La qualité d'un objet standard ne peut jamais être négative.
-    
     """
     # verifie que la qualité et le sell_in sont mis à jour correctement
     # et dimuent de 1 avant la date de vente

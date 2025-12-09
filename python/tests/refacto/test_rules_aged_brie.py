@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from gilded_rose import Item
 from .base_gilded_rose_test import GildedRoseTestCase
 
@@ -8,8 +9,8 @@ class TestAgedBrie(GildedRoseTestCase):
     "Aged Brie" augmente en qualité avec le temps.
     La qualité d'"Aged Brie" ne peut jamais dépasser 50.
     """
-
     # verifie que la qualité et le sell_in sont mis à jour correctement
+    # et que la qualité augmente de 1 chaque jour
     def test_aged_brie_increases_in_quality(self):
         item = Item("Aged Brie", 2, 0)
 
@@ -26,3 +27,22 @@ class TestAgedBrie(GildedRoseTestCase):
 
         self.assertEqual(4, updated.sell_in)
         self.assertEqual(50, updated.quality)
+
+    # verifie que la qualité d'"Aged Brie" augmente de 2 après la date de vente
+    def test_aged_brie_increases_twice_as_fast_after_sell_date(self):
+        item = Item("Aged Brie", 0, 10)
+
+        updated = self.run_update(item)
+
+        self.assertEqual(-1, updated.sell_in)
+        self.assertEqual(12, updated.quality)
+
+    # verifie que la qualité d'"Aged Brie" ne dépasse jamais 50 même après la date de vente
+    def test_aged_brie_quality_cap_applies_after_sell_date(self):
+        item = Item("Aged Brie", 0, 49)
+
+        updated = self.run_update(item)
+
+        self.assertEqual(-1, updated.sell_in)
+        self.assertEqual(50, updated.quality)
+
