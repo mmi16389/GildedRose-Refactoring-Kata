@@ -37,4 +37,14 @@ class TestStandardItems(GildedRoseTestCase):
 
         updated = self.run_update(item)
 
+        self.assertEqual(4, updated.sell_in)
+        self.assertEqual(0, updated.quality)
+
+    # verifie que la qualité d'un objet standard ne devient jamais négative après la date de vente
+    def test_standard_item_quality_never_negative_after_sell_date(self):
+        item = Item("Normal Item", 0, 1)
+
+        updated = self.run_update(item)
+
+        self.assertEqual(-1, updated.sell_in)
         self.assertEqual(0, updated.quality)
