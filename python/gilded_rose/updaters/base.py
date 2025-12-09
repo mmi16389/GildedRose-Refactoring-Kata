@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
+from gilded_rose import Item
 from abc import ABC, abstractmethod
 
 class ItemUpdater(ABC):
-    """Interface commune pour toutes les stratégies de mise à jour des objets."""
+    """Interface commune pour toutes les stratégies de mise à jour."""
 
     @abstractmethod
-    def update(self, item) -> None:
-        """Met à jour un objet selon ses règles métier spécifiques."""
+    def update(self, item: Item) -> Item:
+        """Met à jour l'objet selon les règles spécifiques."""
         ...
-        
+
 def decrease_sell_in(item, amount: int = 1) -> None:
     """Diminue le nombre de jours restants avant l'expiration."""
     item.sell_in -= amount
