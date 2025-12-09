@@ -171,11 +171,89 @@ Les états des objets sont affichés jour par jour dans la console.
     *(pattern Strategy, fabrique, principes SOLID, tests, pistes
     d'évolution)*
 
--   **Code principal :** `gilded_rose.py`
+-   **Code principal :** `gilded_rose/core.py`
 
 -   **Stratégies de mise à jour :** `gilded_rose/updaters/`
 
+---
 
+## Workflow Git & Branching Strategy
+
+> Tout le refactoring a été réalisé sur une seule branche de travail : ***feature/refactor-gilded-rose***
+
+
+---
+
+## Pourquoi pas plusieurs branches ?
+
+Le contexte du kata :
+
+- un code de petite taille,
+- un objectif de démonstration **Craftsmanship**,
+- un pipeline de test très rapide,
+- une limitation de temps.
+
+rend l’approche **multi-branches** trop lourde et peu pertinente.
+
+**Une seule branche** a donc été privilégiée, avec une structure de commits **très granulaire** pour exprimer une démarche progressive, claire et linéaire.
+
+---
+
+## Chaque étape correspond à un commit identifié
+L’ensemble du refactoring a été structuré autour d’une démarche Craftsmanship guidée par les tests.
+Chaque étape est isolée dans un commit identifiable, permettant de rejouer et comprendre la transformation progressive du legacy.
+Ci-dessous, la table complète des commits, classés par étape du workflow.
+
+# Git Workflow — Table of Commit References
+
+| Étape | Description                                                      | Commit SHA |
+|-------|------------------------------------------------------------------|------------|
+| A0    | Initialisation de la branche + baseline tests                    | 94bda51    |
+| A1    | Ajout utilitaires communs pour les tests                         | 606da61    |
+| A2    | Tests de caractérisation – normal items (1)                      | 299427e    |
+| A3    | Tests de caractérisation – Aged Brie                             | e5d2bdb    |
+| A4    | Tests de caractérisation – Backstage passes + tests supplémentaires | 5606949 |
+| A5    | Tests de caractérisation – Sulfuras                              | 51ae823    |
+| A6    | Tests de caractérisation – Normal items (2, scénarios supplémentaires) | f447a86 |
+| A7    | Tests de caractérisation – Conjured items                        | a0d12c6    |
+| B1    | Création du package gilded_rose/                                  | 5154bab    |
+| C1    | Introduction de l’abstraction ItemUpdater                        | 8921fe6    |
+| C2    | Implémentation DefaultUpdater                                     | b205121    |
+| C3    | Ajout test StandardItemUpdater                                     | 86c477e    |
+| C4    | Implémentation AgedBrieUpdater                                     | e534e85    |
+| C5    | Implémentation BackstagePassUpdater                                 | 7245372    |
+| C6    | Implémentation SulfurasUpdater                                      | c410125    |
+| C7    | Implémentation ConjuredUpdater                                      | 1b9fd64    |
+| C8    | Wiring de la factory dans updaters                                   | e217596    |
+| C9    | Tests de la factory                                                  | a1b29b1    |
+| D1    | Migration de Item & GildedRose vers core.py + suppression du legacy | 55ad4e2 |
+| D2    | Transformation du fichier gilded_rose.py en simple façade           | cb10b4d    |
+| E1    | Documentation – Ajout d’une spec d'installation                     | 69f424f    |
+| E2    | Documentation – Mise à jour README finale                            | 1bb68d8    |
+
+## Application du workflow
+```bash
+git checkout <SHA>
+pytest
+```
+Exemple:
+Tester l’état après l’implémentation de `AgedBrieUpdater` étape C4 (commit e534e85) :
+
+```bash
+git checkout e534e85
+pytest
+
+```
+
+## Pistes d’amélioration
+
+Quelques évolutions possibles à partir de ce refactoring :
+
+- Ajouter de nouveaux types d’objets via de nouvelles stratégies, sans toucher à GildedRose.
+
+- Remplacer le mapping statique de SPECIAL_UPDATERS par un registry dynamique (auto-enregistrement des stratégies).
+
+- Introduire une couche métier plus riche (par exemple des classes de domaine pour les types d’objets plutôt que de se baser sur le name brut).
 
 
 
