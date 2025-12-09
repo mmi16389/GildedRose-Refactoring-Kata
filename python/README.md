@@ -206,6 +206,8 @@ Ci-dessous, la table complète des commits, classés par étape du workflow.
 
 # Git Workflow — Table of Commit References
 
+A -> **caractérisation de tests et préparation**, B -> **Structuration, mise en place de la factory,** C -> **Implémentation des stratégies,** D -> **Migration finale et nettoyage,** E -> **Documentation.**
+
 | Étape | Description                                                      | Commit SHA |
 |-------|------------------------------------------------------------------|------------|
 | A0    | Initialisation de la branche + baseline tests                    | 94bda51    |
