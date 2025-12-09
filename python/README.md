@@ -123,6 +123,11 @@ Tout le refactoring est couvert par des tests automatisés.
 ``` bash
 pytest
 ```
+ou 
+
+``` bash
+python -m pytest
+```
 
 Cela exécute :
 
