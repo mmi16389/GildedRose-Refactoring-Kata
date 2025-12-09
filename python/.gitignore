@@ -3,3 +3,8 @@
 .coverage
 .idea/
 *.iml
+.vscode/
+__pycache__/
+env/
+venv/
+.env
