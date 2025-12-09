@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from gilded_rose import Item
 
-from .base import ItemUpdater, decrease_quality, decrease_sell_in, increase_quality
+from .base import ItemUpdater, decrease_sell_in, increase_quality
 
 class AgedBrieUpdater(ItemUpdater):
     """
