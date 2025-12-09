@@ -1,16 +1,16 @@
-# updaters/__init__.py
+# -*- coding: utf-8 -*-
 from .base import ItemUpdater, is_conjured
 from .standard import StandardItemUpdater
 from .aged_brie import AgedBrieUpdater
 from .sulfuras import SulfurasUpdater
-from .backstage import BackstagePassUpdater
+from .backstage import BackstagePassesUpdater
 from .conjured import ConjuredItemUpdater
 
 
 SPECIAL_UPDATERS: dict[str, ItemUpdater] = {
     "Aged Brie": AgedBrieUpdater(),
     "Sulfuras, Hand of Ragnaros": SulfurasUpdater(),
-    "Backstage passes to a TAFKAL80ETC concert": BackstagePassUpdater(),
+    "Backstage passes to a TAFKAL80ETC concert": BackstagePassesUpdater(),
 }
 
 
@@ -29,6 +29,6 @@ __all__ = [ "get_updater_for",
            "StandardItemUpdater", 
            "AgedBrieUpdater", 
            "SulfurasUpdater", 
-           "BackstagePassUpdater", 
+           "BackstagePassesUpdater", 
            "ConjuredItemUpdater" 
            ]
