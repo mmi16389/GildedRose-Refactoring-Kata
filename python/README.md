@@ -234,7 +234,7 @@ Ci-dessous, la table complète des commits, classés par étape du workflow.
 ## Application du workflow
 ```bash
 git checkout <SHA>
-pytest
+pqytest
 ```
 Exemple:
 Tester l’état après l’implémentation de `AgedBrieUpdater` étape C4 (commit e534e85) :
