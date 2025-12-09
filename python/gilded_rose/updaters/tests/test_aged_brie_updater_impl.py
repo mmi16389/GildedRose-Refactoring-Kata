@@ -2,7 +2,7 @@
 import unittest
 
 from gilded_rose import Item
-from gilded_rose.updaters.aged_brie import AgedBrieUpdater  # ton fichier
+from gilded_rose.updaters.aged_brie import AgedBrieUpdater
 
 
 class TestAgedBrieUpdaterImpl(unittest.TestCase):

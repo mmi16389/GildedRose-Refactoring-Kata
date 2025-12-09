@@ -2,7 +2,7 @@
 import unittest
 
 from gilded_rose import Item
-from gilded_rose.updaters.standard import StandardItemUpdater  # ton fichier
+from gilded_rose.updaters.standard import StandardItemUpdater
 
 
 class TestStandardItemUpdaterImpl(unittest.TestCase):
