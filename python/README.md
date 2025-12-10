@@ -51,7 +51,7 @@ GildedRose-Refactoring-Kata/
     │   ├── test_gilded_rose.py        # Tests de règles métier (comportement par type d’objet)
     │   ├── test_gilded_rose_approvals.py
     │   └── approved_files/            # Fichiers approuvés pour les tests d’approval
-    │
+    │   └── refacto/                      # Tests de caractérisation du legacy
     ├── texttest_fixture.py            # Script fourni par le kata (simulation sur plusieurs jours)
     ├── ARCHITECTURE.md                # Documentation détaillée de l’architecture
     └── requirements.txt               # Dépendances Python
@@ -170,7 +170,7 @@ Les états des objets sont affichés jour par jour dans la console.
 -   **Architecture & choix de conception :** `ARCHITECTURE.md`\
     *(pattern Strategy, fabrique, principes SOLID, tests, pistes
     d'évolution)*
-
+- **`README_legacy.md`** : Description de l’implémentation legacy initiale.
 -   **Code principal :** `gilded_rose/core.py`
 
 -   **Stratégies de mise à jour :** `gilded_rose/updaters/`
@@ -184,7 +184,7 @@ Les états des objets sont affichés jour par jour dans la console.
 
 ---
 
-## Pourquoi pas plusieurs branches ?
+### Pourquoi pas plusieurs branches ?
 
 Le contexte du kata :
 
@@ -199,14 +199,14 @@ rend l’approche **multi-branches** trop lourde et peu pertinente.
 
 ---
 
-## Chaque étape correspond à un commit identifié
+### Chaque étape correspond à un commit identifié
 L’ensemble du refactoring a été structuré autour d’une démarche Craftsmanship guidée par les tests.
 Chaque étape est isolée dans un commit identifiable, permettant de rejouer et comprendre la transformation progressive du legacy.
 Ci-dessous, la table complète des commits, classés par étape du workflow.
 
-# Git Workflow — Table of Commit References
+### Table of Commit References
 
-A -> **caractérisation de tests et préparation**, B -> **Structuration, mise en place de la factory,** C -> **Implémentation des stratégies,** D -> **Migration finale et nettoyage,** E -> **Documentation.**
+> A -> **caractérisation de tests et préparation**, B -> **Structuration, mise en place de la factory,** C -> **Implémentation des stratégies,** D -> **Migration finale et nettoyage,** E -> **Documentation.**
 
 | Étape | Description                                                      | Commit SHA |
 |-------|------------------------------------------------------------------|------------|
@@ -253,48 +253,26 @@ Quelques évolutions possibles à partir de ce refactoring :
 
 - Ajouter de nouveaux types d’objets via de nouvelles stratégies, sans toucher à GildedRose.
 
-- Remplacer le mapping statique de SPECIAL_UPDATERS par un registry dynamique (auto-enregistrement des stratégies).
+- Remplacer le mapping statique de SPECIAL_UPDATERS par un registry dynamique (auto-enregistrement des stratégies). Ou encore utiliser un decorateur pour marquer les classes de stratégie.
+> Decorateur
+```python
+UPDATERS = {}
+
+def register(name):
+    def decorator(cls):
+        UPDATERS[name] = cls()
+        return cls
+    return decorator
+
+## Pour chaque stratégie :
+@register("Aged Brie")
+class AgedBrieUpdater(ItemUpdater):
+    ...
+
+## Pour la factory :
+return UPDATERS.get(item.name, AgedBrieUpdater())
+```
 
 - Introduire une couche métier plus riche (par exemple des classes de domaine pour les types d’objets plutôt que de se baser sur le name brut).
 
-
-
-# Gilded Rose starting position in Python(Legacy)
-
-For exercise instructions see [top level README](../README.md)
-
-Suggestion: create a python virtual environment for this project. See the [documentation](https://docs.python.org/3/library/venv.html)
-
-## Run the unit tests from the Command-Line
-
-```
-python -m unittest
-```
-
-## Run the TextTest fixture from the Command-Line
-
-For e.g. 10 days:
-
-```
-python texttest_fixture.py 10
-```
-
-You should make sure the command shown above works when you execute it in a terminal before trying to use TextTest (see below).
-
-
-## Run the TextTest approval test that comes with this project
-
-There are instructions in the [TextTest Readme](../texttests/README.md) for setting up TextTest. You will need to specify the Python executable and interpreter in [config.gr](../texttests/config.gr). Uncomment these lines:
-
-    executable:${TEXTTEST_HOME}/python/texttest_fixture.py
-    interpreter:python
-
-## Run the ApprovalTests.Python test
-
-This test uses the framework [ApprovalTests.Python](https://github.com/approvals/ApprovalTests.Python). You will need to install  Run it like this:
-
-```
-python tests/test_gilded_rose_approvals.py
-```
-
-You will need to approve the output file which appears under "approved_files" by renaming it from xxx.received.txt to xxx.approved.txt.
+---
