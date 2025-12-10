@@ -79,28 +79,139 @@ elle délègue au bon updater via `get_updater_for`.
 
 # 4. Respect des principes SOLID
 
-## SRP — Single Responsibility
+## SRP — Single Responsibility Principle
 
-Chaque updater porte une seule règle métier.
-GildedRose n’orchestration que la sélection de stratégie.
+Principe : une classe = une seule responsabilité métier.
 
-## OCP — Open/Closed
+- Chaque updater porte une seule règle pour un type d’item.
+- GildedRose ne fait que sélectionner la stratégie appropriée.
 
-Ajouter un type d’item ≠ modifier du code existant.
-On ajoute une classe + un binding dans la registry.
+Fichier : `updaters/aged_brie.py`
 
-## LSP — Liskov Substitution
+Règle métier spécifique à Aged Brie uniquement: 
 
-Tous les updaters sont interchangeables via ItemUpdater.
+``` python
+class AgedBrieUpdater(ItemUpdater):
+    def update(self, item) -> None:
+        increase_quality(item, 1)
+        if item.sell_in <= 0:
+            increase_quality(item, 1)
+        decrease_sell_in(item, 1)
+```
 
-## ISP — Interface Segregation
+Fichier : `gilded_rose.py`
 
-Interface minimaliste : une seule méthode obligatoire.
+```python
+def update_quality(self):
+    for item in self.items:
+        updater = get_updater_for(item)   # Orchestration uniquement
+        updater.update(item)              # Délégation métier
+```
 
-## DIP — Dependency Inversion
+## OCP — Open/Closed Principle
 
-GildedRose dépend d’une abstraction (ItemUpdater),
-jamais de classes concrètes.
+Principe : ouvert à l’extension, fermé à la modification.
+
+- Ajouter un nouvel item ne nécessite aucun changement dans GildedRose.
+- On ajoute une nouvelle classe + un binding dans la registry.
+
+Fichier : `updaters/conjured.py`
+
+``` python          
+class ConjuredItemUpdater(ItemUpdater):
+    def update(self, item) -> None:
+        degrade = 2 if item.sell_in > 0 else 4
+        decrease_quality(item, degrade)
+        decrease_sell_in(item, 1)
+```
+
+Fichier : `updaters/__init__.py`
+
+``` python
+SPECIAL_UPDATERS = {
+    "Aged Brie": AgedBrieUpdater(),
+    "Sulfuras, Hand of Ragnaros": SulfurasUpdater(),
+    "Backstage passes to a TAFKAL80ETC concert": BackstagePassUpdater(),
+}
+        
+def get_updater_for(item) -> ItemUpdater:
+    if item.name in SPECIAL_UPDATERS:
+        return SPECIAL_UPDATERS[item.name]
+    if is_conjured(item):
+        return ConjuredItemUpdater()
+    return StandardItemUpdater()
+```
+
+Aucun changement de code existant : juste une extension.
+
+# LSP — Liskov Substitution Principle
+
+Principe : une classe fille doit pouvoir remplacer sa classe parent.
+
+- Tous les updaters sont interchangeables via ItemUpdater.
+
+Fichier : `updaters/base.py`
+
+```python
+class ItemUpdater(ABC):
+    @abstractmethod
+    def update(self, item) -> None:
+        ...
+```
+Fichier : `gilded_rose.py`
+
+```python
+updater = get_updater_for(item)
+updater.update(item)   # Peu importe la classe : polymorphisme parfait
+```
+
+La façade ignore totalement la classe concrète -> LSP respecté.
+
+## ISP — Interface Segregation Principle
+
+Principe : une interface ne doit pas forcer à implémenter plus que nécessaire.
+
+- L’interface du domaine métier est minimaliste : une seule méthode.
+
+Fichier : `updaters/base.py`
+
+```python       
+class ItemUpdater(ABC):
+    @abstractmethod
+    def update(self, item) -> None:
+        """Met à jour un item selon ses règles métier."""
+        ...
+```
+
+Pas de méthodes inutiles : aucune surcharge imposée aux implémentations.
+
+## DIP — Dependency Inversion Principle
+
+Principe : dépendre d’abstractions, pas d’implémentations concrètes.
+
+GildedRose dépend d'une abstraction (ItemUpdater),
+pas des classes concrètes (AgedBrieUpdater, etc.).
+
+Fichier : `gilded_rose.py`
+
+```python
+from updaters import get_updater_for   # dépendance vers une abstraction métier
+
+def update_quality(self):
+    for item in self.items:
+        updater = get_updater_for(item)   # abstraction = policy métier
+        updater.update(item)              # décision déléguée
+
+```
+
+Fichier : `updaters/__init__.py`
+
+```python   
+def get_updater_for(item) -> ItemUpdater:
+    ...
+```
+
+> GildedRose ne voit jamais les classes concrètes.
 
 # 5. Structure du code retenue
 ```text
