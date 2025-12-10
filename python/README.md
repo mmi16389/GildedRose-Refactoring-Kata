@@ -276,3 +276,7 @@ return UPDATERS.get(item.name, AgedBrieUpdater())
 - Introduire une couche métier plus riche (par exemple des classes de domaine pour les types d’objets plutôt que de se baser sur le name brut).
 
 ---
+
+## Temps consacré à l’exercice
+L’exercice a été réalisé sur un temps estimé d’environ 4 heures, incluant quelques interruptions extérieures.
+Malgré ces contraintes de temps, j’ai privilégié une approche structurée, conforme aux principes SOLID et facilement extensible.
