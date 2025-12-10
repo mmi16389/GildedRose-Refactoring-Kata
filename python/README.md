@@ -44,9 +44,9 @@ GildedRose-Refactoring-Kata/
     │   │   ├── backstage.py           # Règles spécifiques Backstage passes
     │   │   ├── conjured.py            # Règles spécifiques Conjured
     │   │   └── __init__.py            # Fabrique get_updater_for + mapping
-    │   │
+    │   │   └── tests/                     # Tests unitaires des stratégies
     │   └── __init__.py                # Package Python
-    │
+    │   └── core.py                     # Implémentation principale (refactorée)
     ├── tests/
     │   ├── test_gilded_rose.py        # Tests de règles métier (comportement par type d’objet)
     │   ├── test_gilded_rose_approvals.py
